@@ -32,3 +32,6 @@ $router->get('/test-db', function () use ($router) {
         ], 500);
     }
 });
+Route::get('/healthz', function () {
+    return response()->json(['status' => 'ok', 'timestamp' => now()]);
+});
