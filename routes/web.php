@@ -14,21 +14,19 @@ $router->post('/login/doctor', 'UserController@loginDoctor');
 $router->post('/login/observador', 'UserController@loginObservador');
 $router->post('/historial/insertar', 'HistorialController@insertHistorial');
 
-$router->get('/test-db', function () use ($router) {
+$router->get('/test-db', function() use ($router) {
     try {
-        DB::connection()->getPdo();
+        \DB::connection()->getPdo();
         return response()->json([
             'success' => true,
-            'message' => '✅ Conexión exitosa a PostgreSQL en Render',
-            'details' => [
-                'host' => env('DB_HOST'),
-                'database' => env('DB_DATABASE')
-            ]
+            'message' => '✅ Conexión exitosa a PostgreSQL',
+            'db_version' => \DB::select('SELECT version()')[0]->version
         ]);
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
-            'error' => '❌ Error de conexión: ' . $e->getMessage()
+            'error' => '❌ Error: ' . $e->getMessage(),
+            'solution' => 'Verifica que las extensiones pgsql estén instaladas en PHP'
         ], 500);
     }
 });
